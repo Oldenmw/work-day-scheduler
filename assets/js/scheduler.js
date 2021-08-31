@@ -1,6 +1,6 @@
 var dateEl = document.querySelector("#currentDay");
 var currentHour = new Date().getHours();
-var tasks = {};
+var tasks = [];
 
 var fillCurrentDate = function() {
     var currentDate = moment().format('dddd, MMMM Do');
@@ -16,21 +16,25 @@ $(".task-body").on("click", function() {
 
     var textInput = $("<textarea>")
         .addClass("col-10 task-input")
-        .attr('id', pId)
+        .attr("id", pId)
         .val(text);
     $(this).children('p').replaceWith(textInput);
-  
+
     textInput.trigger("focus");
 });
 
 $(".task-body").focusout( function() {
     var text = $(this).children("textarea")
         .val();
-    // update task in array and re-save to localstorage
-    // tasks[status][index].text = text;
+    var textareaId = $(this).children("textarea")
+        .attr("id");
+    
+    // var tasksId = textareaId.slice(-1);
+    // tasks[tasksId] = text;
     // saveTasks();
   
     var taskP = $("<p>")
+        .attr("id", textareaId)
         .text(text);
     $(this).children("textarea").replaceWith(taskP);
   });
@@ -52,29 +56,23 @@ var timeBlocks = function(hour) {
 var loadTasks = function() {
     tasks = JSON.parse(localStorage.getItem("tasks"));
   
-    // if nothing in localStorage, create a new object to track all task status arrays
     if (!tasks) {
-      tasks = {
-        hour0: [],
-        hour1: [],
-        hour2: [],
-        hour3: [],
-        hour4: [],
-        hour5: [],
-        hour6: [],
-        hour7: [],
-        hour8: []
-      };
+      tasks = ["", "", "", "", "", "", "", "", ""]
     }
-  
-    // loop over object properties
-    $.each(tasks, function(list, arr) {
-      // then loop over sub-array
-      arr.forEach(function(task) {
-        var pEl = document.querySelector("#")
-      });
-    });
+
+    for (i = 0; i < 9; i++) {
+        console.log(tasks[i]);
+        $("#task-" + i).text(tasks[i]);
+    };
 };
+
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+$(".save-btn").on("click", function() {
+    
+});
 
 fillCurrentDate();
 
@@ -84,6 +82,7 @@ var fillTaskBlocks = function() {
     };
 };
 fillTaskBlocks();
+loadTasks();
 
 setInterval(function() {
     fillTaskBlocks();
