@@ -70,8 +70,23 @@ var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
-$(".save-btn").on("click", function() {
+$(".saveBtn").on("click", function() {
+    var parentDiv = $(this).parent();
+    var taskText = parentDiv
+        .children()
+        .children("p")
+        .text()
+        .trim();
     
+    var taskId = parentDiv
+        .children()
+        .children("p")
+        .attr("id")
+
+    var taskArrayId = taskId.slice(-1);
+
+    tasks[taskArrayId] = taskText;
+    saveTasks();
 });
 
 fillCurrentDate();
